@@ -3,25 +3,62 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/templates/template.xhtml">
-        <ui:define name="titulo">Manutenção de Setores</ui:define>
+        <ui:define name="titulo">Manutenção de Setor</ui:define>
         <ui:define name="conteudo">
             <h:form id="formListagem">
                 <h:panelGroup rendered="#{!controleSetor.editando}">
                     <p:messages/>
                     <p:commandButton value="Novo"
                                      icon="ui-icon-plus"
-                                     actionListener="#{controleSetor.novo()}"
+                                     actionListener="#{controleSetor.novo()}"                                     
+                                     title="Novo registro"
                                      update="formEdicao formListagem"/>
-                    <p:dataTable value="#{controleSetor.dao.listaOjetos}"
-                                 var="obj" reflow="true">
+                    <div align="left">
+                        <p:panelGrid columns="11">
+                            <p:outputLabel value="Ordem:"/>
+                            <p:selectOneMenu id="ordem" value="#{controleSetor.dao.ordem}">
+                                <f:selectItem itemLabel="ID" itemValue="id"/>
+                                <f:selectItem itemLabel="Nome" itemValue="nome"/>
+                                <p:ajax update="listagem"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Filtro: "/>
+                            <p:inputText value="#{controleSetor.dao.filtro}">
+                                <p:ajax event="keyup" update="listagem"/>
+                            </p:inputText>
+                            <p:commandButton value="Filtrar" update="listagem"/>
+                            <p:outputLabel value="Máximo de objetos"/>
+                            <p:inputText value="#{controleSetor.dao.maximoObjetos}" size="1">
+                                <p:ajax event="keyup" update="listagem"/>
+                            </p:inputText>
+
+                            <p:commandButton actionListener="#{controleSetor.dao.primeiro()}"
+                                             icon="ui-icon-seek-first" update="listagem" title="Primeiro"/>
+                            <p:commandButton actionListener="#{controleSetor.dao.anterior()}"
+                                             icon="ui-icon-seek-prev" update="listagem" title="Anterior"/>
+                            <p:commandButton actionListener="#{controleSetor.dao.proximo()}"
+                                             icon="ui-icon-seek-next" update="listagem" title="Próximo"/>
+                            <p:commandButton actionListener="#{controleSetor.dao.ultimo()}"
+                                             icon="ui-icon-seek-end" update="listagem" title="Último"/>
+                        </p:panelGrid>                        
+                    </div>
+                    
+                    <p:dataTable value="#{controleSetor.dao.listaObjetos}"
+                                 var="obj" id="listagem" reflow="true">
+                        <f:facet name="header">
+                            <p:outputLabel value="Listagem de Setor"/>
+                        </f:facet>
+                        <f:facet name="footer">
+                            <p:outputLabel value="#{controleSetor.dao.mensagemNavegacao}"/>
+                        </f:facet>
                         <p:column headerText="ID">
                             <p:outputLabel value="#{obj.id}"/>
                         </p:column>
                         <p:column headerText="Nome">
                             <p:outputLabel value="#{obj.nome}"/>
-                        </p:column>  
+                        </p:column>   
                         <p:column headerText="Ações">
                             <div align="center">
                                 <p:commandButton icon="ui-icon-pencil" 
@@ -32,8 +69,10 @@
                                 <p:commandButton icon="ui-icon-trash"
                                                  actionListener="#{controleSetor.excluir(obj.id)}"
                                                  process="@this"
-                                                 title="Excluir"
-                                                 update="formListagem"/>
+                                                 update="formListagem"
+                                                 title="Remover"
+                                                 onclick="if (!confirm('O registro selecionado será removido, tem certeza?'))
+                                                             return false"/>
                             </div>
                         </p:column>
                     </p:dataTable>

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.ifsul.dao;
 
 import java.io.Serializable;
@@ -14,89 +9,167 @@ import javax.persistence.PersistenceContext;
  *
  * @author Joel
  */
-public class DAOGenerico<TIPO> implements Serializable{
-    private List<TIPO> listaOjetos;
+public class DAOGenerico<TIPO> implements Serializable {
+
+    private List<TIPO> listaObjetos;
     private List<TIPO> listaTodos;
-    @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")//Referencia o nome da unidade de persistência
+    @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")
     private EntityManager em;
     private Class classePersistente;
-    
-    public DAOGenerico(){
-        
+    private String mensagem = "";
+    private String ordem = "id";
+    private String filtro = "";
+    private Integer maximoObjetos = 5;
+    private Integer posicaoAtual = 0;
+    private Integer totalObjetos = 0;
+
+    public DAOGenerico() {
     }
 
-    /**
-     * @return the listaOjetos
-     */
-    public List<TIPO> getListaOjetos() {
+    public List<TIPO> getListaObjetos() {
         String jpql = "from " + classePersistente.getSimpleName();
-        return em.createQuery(jpql).getResultList();
+        String where = "";
+        setFiltro(getFiltro().replaceAll("[';-]", ""));
+        if (getFiltro().length() > 0) {
+            if (getOrdem().equals("id")) {
+                try {
+                    Integer.parseInt(getFiltro());
+                    where += " where " + getOrdem() + " = '" + getFiltro() + "' ";
+                } catch (Exception e) {
+                }
+            } else {
+                where += " where upper(" + getOrdem() + ") like '" + getFiltro().toUpperCase() + "%' ";
+            }
+        }
+        jpql += where;
+        jpql += " order by " + getOrdem();
+        setTotalObjetos((Integer) em.createQuery("select id from " + classePersistente.getSimpleName()
+                + where + " order by " + getOrdem()).getResultList().size());
+        return em.createQuery(jpql).
+                setFirstResult(getPosicaoAtual()).
+                setMaxResults(getMaximoObjetos()).getResultList();
     }
-    
-     /**
-     * @return the listaTodos
-     */
+
     public List<TIPO> getListaTodos() {
-        String jpql = "from " + classePersistente.getSimpleName();
+        String jpql = "from " + classePersistente.getSimpleName() + " order by "
+                + getOrdem();
         return em.createQuery(jpql).getResultList();
     }
-    
-    public void persist(TIPO obj) throws Exception{
+
+    public void persist(TIPO obj) throws Exception {
         em.persist(obj);
     }
-    
-    public void merge(TIPO obj) throws Exception{
+
+    public void merge(TIPO obj) throws Exception {
         em.merge(obj);
     }
-    
-    public TIPO getObjectById(Object id) throws Exception{
+
+    public TIPO getObjectById(Object id) throws Exception {
         return (TIPO) em.find(classePersistente, id);
     }
-    
-    public void remover(TIPO obj) throws Exception{
-        obj = em.merge(obj);//vincula com o banco para remover.
+
+    public void remover(TIPO obj) throws Exception {
+        obj = em.merge(obj);
         em.remove(obj);
     }
-    /**
-     * @param listaOjetos the listaOjetos to set
-     */
-    public void setListaOjetos(List<TIPO> listaOjetos) {
-        this.listaOjetos = listaOjetos;
+
+    public void setListaObjetos(List<TIPO> listaObjetos) {
+        this.listaObjetos = listaObjetos;
     }
 
-    /**
-     * @param listaTodos the listaTodos to set
-     */
     public void setListaTodos(List<TIPO> listaTodos) {
         this.listaTodos = listaTodos;
-    }    
-    
+    }
 
-    /**
-     * @return the em
-     */
+    public void primeiro() {
+        setPosicaoAtual((Integer) 0);
+    }
+
+    public void anterior() {
+        setPosicaoAtual((Integer) (getPosicaoAtual() - getMaximoObjetos()));
+        if (getPosicaoAtual() < 0) {
+            setPosicaoAtual((Integer) 0);
+        }
+    }
+
+    public void proximo() {
+        if (getPosicaoAtual() + getMaximoObjetos() < getTotalObjetos()) {
+            setPosicaoAtual((Integer) (getPosicaoAtual() + getMaximoObjetos()));
+        }
+    }
+
+    public void ultimo() {
+        int resto = getTotalObjetos() % getMaximoObjetos();
+        if (resto > 0) {
+            setPosicaoAtual((Integer) getTotalObjetos() - resto);
+        } else {
+            setPosicaoAtual((Integer) getTotalObjetos() - getMaximoObjetos());
+        }
+    }
+
+    public String getMensagemNavegacao() {
+        int ate = getPosicaoAtual() + getMaximoObjetos();
+        if (ate > getTotalObjetos()) {
+            ate = getTotalObjetos();
+        }
+        return "Listando de " + (getPosicaoAtual() + 1) + " até " + ate + " de "
+                + getTotalObjetos() + " registros";
+    }
+
     public EntityManager getEm() {
         return em;
     }
 
-    /**
-     * @param em the em to set
-     */
     public void setEm(EntityManager em) {
         this.em = em;
     }
 
-    /**
-     * @return the classePersistente
-     */
     public Class getClassePersistente() {
         return classePersistente;
     }
 
-    /**
-     * @param classePersistente the classePersistente to set
-     */
     public void setClassePersistente(Class classePersistente) {
         this.classePersistente = classePersistente;
     }
+
+    public String getOrdem() {
+        return ordem;
+    }
+
+    public void setOrdem(String ordem) {
+        this.ordem = ordem;
+    }
+
+    public String getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(String filtro) {
+        this.filtro = filtro;
+    }
+
+    public Integer getMaximoObjetos() {
+        return maximoObjetos;
+    }
+
+    public void setMaximoObjetos(Integer maximoObjetos) {
+        this.maximoObjetos = maximoObjetos;
+    }
+
+    public Integer getPosicaoAtual() {
+        return posicaoAtual;
+    }
+
+    public void setPosicaoAtual(Integer posicaoAtual) {
+        this.posicaoAtual = posicaoAtual;
+    }
+
+    public Integer getTotalObjetos() {
+        return totalObjetos;
+    }
+
+    public void setTotalObjetos(Integer totalObjetos) {
+        this.totalObjetos = totalObjetos;
+    }
+
 }
