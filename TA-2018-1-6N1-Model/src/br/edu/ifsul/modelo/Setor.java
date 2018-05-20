@@ -32,7 +32,7 @@ public class Setor implements Serializable{
     private Integer id;
     
     @NotNull(message = "O nome não pode ser nulo")
-    @NotBlank(message = "O nome não pode ser em branco")
+    @NotBlank(message = "O nome não pode estar em branco")
     @Length(max = 40, message = "O nome não pode ter mais que {max} caracteres")
     @Column(name = "nome", length = 40, nullable = false)
     private String nome;

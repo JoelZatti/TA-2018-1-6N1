@@ -33,8 +33,8 @@ public class Permissao implements Serializable{
     
     @NotBlank(message = "O campo descrição não pode estar em branco")
     @NotNull(message = "O campo descrição não pode ser nulo")  
-    @Length(max = 100, message = "O descrição não pode ter mais que {max} caracteres")
-    @Column(name = "nome", length = 100, nullable = false)
+    @Length(max = 100, message = "A descrição não pode ter mais que {max} caracteres")
+    @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
     
     public Permissao(){        

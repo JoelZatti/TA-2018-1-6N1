@@ -50,19 +50,19 @@ public class Usuario implements Serializable {
     private String nome;
 
     @NotNull(message = "O email não pode ser nulo")
-    @NotBlank(message = "O email não ser em branco")
+    @NotBlank(message = "O email não ser pode estar em branco")
     @Length(max = 50, message = "O email não pode ter mais de {max} caracteres")
     @Column(name = "email", length = 50, nullable = false)
     private String email;
 
     @NotNull(message = "O nome de usuario não pode ser nulo")
-    @NotBlank(message = "O nome de usuario não ser em branco")
+    @NotBlank(message = "O nome de usuario não pode estar em branco")
     @Length(max = 20, message = "O nome de usuario não pode ter mais de {max} caracteres")
     @Column(name = "usuario", length = 20, nullable = false, unique = true)
     private String usuario;
 
     @NotNull(message = "A senha não pode ser nula")
-    @NotBlank(message = "A senha não ser em branco")
+    @NotBlank(message = "A senha não pode estar em branco")
     @Length(max = 10, message = "A senha não pode ter mais de {max} caracteres")
     @Column(name = "senha", length = 10, nullable = false)
     private String senha;

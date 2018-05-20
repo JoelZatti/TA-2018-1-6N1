@@ -43,15 +43,15 @@ public class Projeto implements Serializable {
     private Integer id;
 
     @NotNull(message = "O nome não pode ser nulo")
-    @NotBlank(message = "O nome não pode ser em branco")
+    @NotBlank(message = "O nome não pode estar em branco")
     @Length(max = 40, message = "O nome não pode ter mais que {max} caracteres")
     @Column(name = "nome", length = 40, nullable = false)
     private String nome;
 
     @NotBlank(message = "O campo descrição não pode estar em branco")
     @NotNull(message = "O campo descrição não pode ser nulo")
-    @Length(max = 100, message = "O descrição não pode ter mais que {max} caracteres")
-    @Column(name = "nome", length = 100, nullable = false)
+    @Length(max = 100, message = "A descrição não pode ter mais que {max} caracteres")
+    @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
 
     @NotNull(message = "A data de início não pode ser nula")
@@ -73,7 +73,7 @@ public class Projeto implements Serializable {
     @ForeignKey(name = "fk_setor")
     private Setor setor;
     
-    @OneToMany(mappedBy = "colaborador", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)    
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)    
     private List<Colaborador> colaboradores = new ArrayList<>();
     
     public Projeto(){        

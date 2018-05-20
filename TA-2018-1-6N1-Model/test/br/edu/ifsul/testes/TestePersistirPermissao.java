@@ -48,11 +48,15 @@ public class TestePersistirPermissao {
     public void teste() {
         boolean exception = false;
         try {
-            Permissao p = new Permissao();
-            p.setNome("A");
-            p.setDescricao("Administrador");
+            Permissao p1 = new Permissao();
+            p1.setNome("ADMINISTRADOR");
+            p1.setDescricao("Usuario administrativo");
+            Permissao p2 = new Permissao();
+            p2.setNome("USUARIO");
+            p2.setDescricao("Usuario simples");
             em.getTransaction().begin();
-            em.persist(p);
+            em.persist(p1);
+            em.persist(p2);
             em.getTransaction().commit();
         } catch (Exception e) {
             exception = true;
