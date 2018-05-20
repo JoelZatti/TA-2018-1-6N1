@@ -14,22 +14,22 @@ public class DAOGenerico<TIPO> implements Serializable {
     private List<TIPO> listaObjetos;
     private List<TIPO> listaTodos;
     @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")
-    private EntityManager em;
-    private Class classePersistente;
-    private String mensagem = "";
-    private String ordem = "id";
-    private String filtro = "";
-    private Integer maximoObjetos = 5;
-    private Integer posicaoAtual = 0;
-    private Integer totalObjetos = 0;
+    protected EntityManager em;
+    protected Class classePersistente;
+    protected String ordem = "id";
+    protected String filtro = "";
+    protected Integer maximoObjetos = 2;
+    protected Integer posicaoAtual = 0;
+    protected Integer totalObjetos = 0;
 
     public DAOGenerico() {
+
     }
 
     public List<TIPO> getListaObjetos() {
         String jpql = "from " + classePersistente.getSimpleName();
         String where = "";
-        setFiltro(getFiltro().replaceAll("[';-]", ""));
+        filtro = filtro.replaceAll("[';-]", "");
         if (getFiltro().length() > 0) {
             if (getOrdem().equals("id")) {
                 try {
@@ -42,17 +42,54 @@ public class DAOGenerico<TIPO> implements Serializable {
             }
         }
         jpql += where;
-        jpql += " order by " + getOrdem();
-        setTotalObjetos((Integer) em.createQuery("select id from " + classePersistente.getSimpleName()
-                + where + " order by " + getOrdem()).getResultList().size());
+        jpql += " order by " + ordem;
+        totalObjetos = em.createQuery(jpql).getResultList().size();
         return em.createQuery(jpql).
-                setFirstResult(getPosicaoAtual()).
-                setMaxResults(getMaximoObjetos()).getResultList();
+                setFirstResult(posicaoAtual).
+                setMaxResults(maximoObjetos).getResultList();
+    }
+
+    public void primeiro() {
+        posicaoAtual = 0;
+    }
+
+    public void anterior() {
+        posicaoAtual -= maximoObjetos;
+        if (posicaoAtual < 0) {
+            posicaoAtual = 0;
+        }
+    }
+
+    public void proximo() {
+        if (posicaoAtual + maximoObjetos < totalObjetos) {
+            posicaoAtual += maximoObjetos;
+        }
+    }
+
+    public void ultimo() {
+        int resto = totalObjetos % maximoObjetos;
+        if (resto > 0) {
+            posicaoAtual = totalObjetos - resto;
+        } else {
+            posicaoAtual = totalObjetos - maximoObjetos;
+        }
+    }
+
+    public String getMensagemNavegacao() {
+        int ate = posicaoAtual + maximoObjetos;
+        if (ate > totalObjetos) {
+            ate = totalObjetos;
+        }
+        if (totalObjetos > 0) {
+            return "Listagem de " + (posicaoAtual + 1) + " até " + ate
+                    + " de " + totalObjetos + " registros";
+        } else {
+            return "Nenhum registro encontrado!";
+        }
     }
 
     public List<TIPO> getListaTodos() {
-        String jpql = "from " + classePersistente.getSimpleName() + " order by "
-                + getOrdem();
+        String jpql = "from " + classePersistente.getSimpleName();
         return em.createQuery(jpql).getResultList();
     }
 
@@ -79,41 +116,6 @@ public class DAOGenerico<TIPO> implements Serializable {
 
     public void setListaTodos(List<TIPO> listaTodos) {
         this.listaTodos = listaTodos;
-    }
-
-    public void primeiro() {
-        setPosicaoAtual((Integer) 0);
-    }
-
-    public void anterior() {
-        setPosicaoAtual((Integer) (getPosicaoAtual() - getMaximoObjetos()));
-        if (getPosicaoAtual() < 0) {
-            setPosicaoAtual((Integer) 0);
-        }
-    }
-
-    public void proximo() {
-        if (getPosicaoAtual() + getMaximoObjetos() < getTotalObjetos()) {
-            setPosicaoAtual((Integer) (getPosicaoAtual() + getMaximoObjetos()));
-        }
-    }
-
-    public void ultimo() {
-        int resto = getTotalObjetos() % getMaximoObjetos();
-        if (resto > 0) {
-            setPosicaoAtual((Integer) getTotalObjetos() - resto);
-        } else {
-            setPosicaoAtual((Integer) getTotalObjetos() - getMaximoObjetos());
-        }
-    }
-
-    public String getMensagemNavegacao() {
-        int ate = getPosicaoAtual() + getMaximoObjetos();
-        if (ate > getTotalObjetos()) {
-            ate = getTotalObjetos();
-        }
-        return "Listando de " + (getPosicaoAtual() + 1) + " até " + ate + " de "
-                + getTotalObjetos() + " registros";
     }
 
     public EntityManager getEm() {

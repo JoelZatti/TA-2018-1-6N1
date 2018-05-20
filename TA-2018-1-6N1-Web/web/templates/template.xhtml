@@ -5,8 +5,7 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <f:view encoding="ISO-8859-1" class="texto/html"
-            locale="#{controleLocale.currenLocale}">
+    <f:view encoding="ISO-8859-1" class="texto/html" locale="#{controleLocale.currenLocale}">
         <h:head>
             <title><ui:insert name="titulo"> </ui:insert></title>
         </h:head>
@@ -19,6 +18,8 @@
                             <b:dropMenu value="Cadastros">
                                 <b:navCommandLink value="Setor" ajax="false"
                                                   action="#{controleSetor.listar()}"/>
+                                <b:navCommandLink value="Usuario" ajax="false"
+                                                  action="#{controleUsuario.listar()}"/>
                             </b:dropMenu>
                         </b:navbarLinks>
                     </b:navBar>
