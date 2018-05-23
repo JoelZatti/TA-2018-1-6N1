@@ -7,54 +7,98 @@
     <h:form id="formEdicao">
         <h:panelGroup rendered="#{controleUsuario.editando}">
             <div class="ui-fluid">
-                <p:messages/>
+                <p:messages id="messages"/>
                 <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
-                             layout="grid" styleClass="ui-panelgrid-blank">
+                    layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
                         <p:outputLabel value="Edição de Usuarios"/>
                     </f:facet>
                     <p:outputLabel value="ID"/>
                     <p:inputText value="#{controleUsuario.objeto.id}"
                                  size="5" readonly="true"/>
-
                     <p:outputLabel value="Nome" for="txtNome"/>
                     <p:inputText value="#{controleUsuario.objeto.nome}"
                                  id="txtNome" size="50" maxlength="50"/>
-
                     <p:outputLabel value="Email" for="txtEmail"/>
                     <p:inputText value="#{controleUsuario.objeto.email}"
-                                 id="txtEmail" size="50" maxlength="50"/>
-
-                    <p:outputLabel value="Nome de usuário" for="txtUsuario"/>                    
+                                 id="txtEmail" size="50" maxlength="50"/> 
+                    <p:outputLabel value="Nome de usuário" for="txtUsuario"/>
                     <p:inputText value="#{controleUsuario.objeto.usuario}"
-                                 id="txtUsuario" size="20" maxlength="20"/>
-
-                    <p:outputLabel value="Senha" for="txtSenha"/>                    
+                                 id="txtUsuario" size="20" maxlength="20"/>  
+                    <p:outputLabel value="Senha" for="txtSenha"/>
                     <p:password value="#{controleUsuario.objeto.senha}" redisplay="true"
-                                id="txtSenha" size="20" maxlength="20"/>
-
-                    <p:outputLabel value="Nascimento" for="txtNascimento"/>                    
+                                 id="txtSenha" size="20" maxlength="20"/> 
+                    <p:outputLabel value="Nascimento" for="txtNascimento"/>
                     <p:calendar id="txtNascimento" value="#{controleUsuario.objeto.nascimento}"
                                 mask="true" pattern="dd/MM/yyyy" navigator="true">
-                        <f:converter converterId="converterCalendar"/>    
+                        <f:converter converterId="converterCalendar"/>
                     </p:calendar>
                     <p:outputLabel value="Setor" for="selectSetor"/>
                     <p:selectOneMenu value="#{controleUsuario.objeto.setor}"
                                      id="selectSetor" filter="true" filterMatchMode="startsWith">
-                        <f:converter converterId="converterSetor"/>   
+                        <f:converter converterId="converterSetor"/>
                         <f:selectItem itemLabel="Selecione um registro"
                                       noSelectionOption="true"/>
                         <f:selectItems value="#{controleUsuario.daoSetor.listaTodos}"
                                        var="s" itemLabel="#{s.nome}"/>
                     </p:selectOneMenu>
-
                     <p:commandButton value="Salvar"
                                      icon="ui-icon-disk"
                                      actionListener="#{controleUsuario.salvar()}"
                                      update="formEdicao :formListagem"/>
                 </p:panelGrid>
+                <h:panelGroup id="painelPermissao">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleUsuario.editandoPermissao}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de permissão do usuário"/>
+                        </f:facet>             
+                        <p:outputLabel value="Permissão" for="selectPermissao"/>
+                        <p:selectOneMenu id="selectPermissao" value="#{controleUsuario.permissao}"
+                                         filter="true">
+                            <f:converter converterId="converterPermissao"/>
+                            <f:selectItem noSelectionOption="true"
+                                          itemLabel="Selecione um registro"/>
+                            <f:selectItems value="#{controleUsuario.daoPermissao.listaTodos}"
+                                           var="p" itemLabel="#{p.nome}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Salvar Permissão" icon="ui-icon-disk"
+                                         actionListener="#{controleUsuario.salvarPermissao()}"
+                                         id="btnAdicionarPermissao"
+                                         process="btnAdicionarPermissao selectPermissao"
+                                         update="messages painelPermissao listagemPermissao"/>                                         
+                    </p:panelGrid>                                                            
+                </h:panelGroup>    
             </div>
+            <h:panelGroup id="listagemPermissao">
+                <h:panelGroup rendered="#{!controleUsuario.editandoPermissao}">
+                    <p:commandButton value="Nova Permissão"
+                                     actionListener="#{controleUsuario.novaPermissao()}"
+                                     update="listagemPermissao painelPermissao"
+                                     process="@this"/>
+                    <p:dataTable value="#{controleUsuario.objeto.permissoes}" var="per"
+                                 reflow="true">
+                        <f:facet name="header">
+                            <p:outputLabel value="Permissões do Usuário"/>
+                        </f:facet>
+                        <p:column headerText="Nome">
+                            <p:outputLabel value="#{per.nome}"/>
+                        </p:column>
+                        <p:column headerText="Descrição">
+                            <p:outputLabel value="#{per.descricao}"/>
+                        </p:column>  
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleUsuario.removerPermissao(per)}"
+                                                 process="@this" update="@form"/>                                                 
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:panelGroup>
         </h:panelGroup>
     </h:form>
 </html>
-
