@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.edu.ifsul.modelo;
 
 import java.io.Serializable;
@@ -42,153 +37,103 @@ public class Projeto implements Serializable {
     @GeneratedValue(generator = "seq_projeto", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @NotNull(message = "O nome não pode ser nulo")
-    @NotBlank(message = "O nome não pode estar em branco")
-    @Length(max = 40, message = "O nome não pode ter mais que {max} caracteres")
-    @Column(name = "nome", length = 40, nullable = false)
+    @Length(max = 50, message = "O nome não pode ter mais que {max} caracteres")
+    @NotNull(message = "O nome deve ser informado")
+    @NotBlank(message = "O nome não pode ser em branco")
+    @Column(name = "nome", length = 50, nullable = false)
     private String nome;
 
-    @NotBlank(message = "O campo descrição não pode estar em branco")
-    @NotNull(message = "O campo descrição não pode ser nulo")
-    @Length(max = 100, message = "A descrição não pode ter mais que {max} caracteres")
+    @Length(max = 100, message = "A descriçao não pode ter mais que {max} caracteres")
+    @NotNull(message = "A descriçao deve ser informada")
+    @NotBlank(message = "A descriçao não pode ser em branco")
     @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
 
-    @NotNull(message = "A data de início não pode ser nula")
-    @Temporal(TemporalType.DATE)
+    @NotNull(message = "O inicio deve ser informado")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inicio", nullable = false)
     private Calendar inicio;
-    
-    @NotNull(message = "A data final não pode ser nula")
-    @Temporal(TemporalType.DATE)
+
+    @NotNull(message = "O fim deve ser informad")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fim", nullable = false)
     private Calendar fim;
-    
+
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;
-    
-    @NotNull(message = "O setor deve ser informado")
+
     @ManyToOne
+    @NotNull(message = "O setor deve ser informado")
     @JoinColumn(name = "setor", referencedColumnName = "id", nullable = false)
-    @ForeignKey(name = "fk_setor")
+    @ForeignKey(name = "fK_setor_id")
     private Setor setor;
-    
-    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)    
-    private List<Colaborador> colaboradores = new ArrayList<>();
-    
-    public Projeto(){        
-    }
-    
-    public void adicionarColaboradores(Colaborador obj){
-        obj.setProjeto(this);
-        this.colaboradores.add(obj);
-    }
-    
-    public void removerColaboradores(int index){
-        this.colaboradores.remove(id);
+
+    @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Colaborador> listaColaboradores = new ArrayList<>();
+
+    public Projeto() {
     }
 
-    /**
-     * @return the id
-     */
     public Integer getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    /**
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * @param nome the nome to set
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * @return the descricao
-     */
     public String getDescricao() {
         return descricao;
     }
 
-    /**
-     * @param descricao the descricao to set
-     */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    /**
-     * @return the inicio
-     */
     public Calendar getInicio() {
         return inicio;
     }
 
-    /**
-     * @param inicio the inicio to set
-     */
     public void setInicio(Calendar inicio) {
         this.inicio = inicio;
     }
 
-    /**
-     * @return the fim
-     */
     public Calendar getFim() {
         return fim;
     }
 
-    /**
-     * @param fim the fim to set
-     */
     public void setFim(Calendar fim) {
         this.fim = fim;
     }
 
-    /**
-     * @return the ativo
-     */
     public Boolean getAtivo() {
         return ativo;
     }
 
-    /**
-     * @param ativo the ativo to set
-     */
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
-    /**
-     * @return the setor
-     */
-    public Setor getSetor() {
-        return setor;
+    public List<Colaborador> getListaColaboradores() {
+        return listaColaboradores;
     }
 
-    /**
-     * @param setor the setor to set
-     */
-    public void setSetor(Setor setor) {
-        this.setor = setor;
+    public void setListaColaboradores(List<Colaborador> listaColaboradores) {
+        this.listaColaboradores = listaColaboradores;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 7;
         hash = 53 * hash + Objects.hashCode(this.id);
         return hash;
     }
@@ -211,18 +156,12 @@ public class Projeto implements Serializable {
         return true;
     }
 
-    /**
-     * @return the colaboradores
-     */
-    public List<Colaborador> getColaboradores() {
-        return colaboradores;
+    public Setor getSetor() {
+        return setor;
     }
 
-    /**
-     * @param colaboradores the colaboradores to set
-     */
-    public void setColaboradores(List<Colaborador> colaboradores) {
-        this.colaboradores = colaboradores;
+    public void setSetor(Setor setor) {
+        this.setor = setor;
     }
 
 }

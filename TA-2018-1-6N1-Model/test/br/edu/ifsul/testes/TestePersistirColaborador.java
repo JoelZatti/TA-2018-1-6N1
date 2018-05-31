@@ -6,10 +6,7 @@
 package br.edu.ifsul.testes;
 
 import br.edu.ifsul.modelo.Colaborador;
-import br.edu.ifsul.modelo.Projeto;
-import br.edu.ifsul.modelo.Setor;
 import br.edu.ifsul.modelo.Usuario;
-import java.util.Calendar;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,7 +14,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -44,20 +40,17 @@ public class TestePersistirColaborador {
     }
 
     @Test
-    public void teste() {
+    public void teste(){
         boolean exception = false;
         try {
-            Projeto p = em.find(Projeto.class, 1);
             Colaborador c = new Colaborador();
+            c.setCargaHoraria(8);
             c.setGestor(true);
-            c.setCargaHoraria(10);
-            //c.setProjeto(em.find(Projeto.class, 1));
             c.setUsuario(em.find(Usuario.class, 1));
-            p.adicionarColaboradores(c);
             em.getTransaction().begin();
             em.persist(c);
             em.getTransaction().commit();
-        } catch (Exception e) {
+        } catch(Exception e){
             exception = true;
             e.printStackTrace();
         }
