@@ -6,7 +6,6 @@
 package br.edu.ifsul.dao;
 
 import br.edu.ifsul.modelo.Permissao;
-import br.edu.ifsul.modelo.Setor;
 import java.io.Serializable;
 import javax.ejb.Stateful;
 
@@ -15,9 +14,12 @@ import javax.ejb.Stateful;
  * @author Joel
  */
 @Stateful
-public class PermissaoDAO<TIPO> extends DAOGenerico<TIPO> implements Serializable{
+public class PermissaoDAO<TIPO> extends DAOGenerico<Permissao> implements Serializable{
+    
     public PermissaoDAO(){
         super();
-        super.setClassePersistente(Permissao.class);
+        classePersistente = Permissao.class;
+        ordem = "nome";
+        maximoObjetos = 3;
     }
 }

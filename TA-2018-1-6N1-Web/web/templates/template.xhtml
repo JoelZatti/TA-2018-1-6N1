@@ -12,22 +12,23 @@
         <h:body>
             <b:container>
                 <h:form id="formMenu">
-                    <b:navBar brand="TA">
+                <b:navBar brand="TA - Sistema responsivo">
                         <b:navbarLinks>
-                            <b:navLink value="Inicio" outcome="inicio"/>
+                        <b:navLink value="Início" outcome="inicio"/>
                             <b:dropMenu value="Cadastros">
                                 <b:navCommandLink value="Setor" ajax="false"
                                                   action="#{controleSetor.listar()}"/>
                                 <b:navCommandLink value="Usuario" ajax="false"
                                                   action="#{controleUsuario.listar()}"/>
-                                <b:navCommandLink value="Colaborador" ajax="false"
-                                                  action="#{controleColaborador.listar()}"/>
+                             <b:navCommandLink value="Projeto" ajax="false"
+                                               action="#{controleProjeto.listar()}"/>
                             </b:dropMenu>
                         </b:navbarLinks>
                     </b:navBar>
                 </h:form>
                 <h:panelGroup id="conteudo" >
                     <ui:insert name="conteudo">                        
+                        aqui vai o conteudo das páginas
                     </ui:insert>
                 </h:panelGroup>     
             </b:container>

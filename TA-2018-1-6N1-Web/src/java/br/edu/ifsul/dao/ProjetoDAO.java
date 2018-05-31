@@ -14,9 +14,22 @@ import javax.ejb.Stateful;
  * @author Joel
  */
 @Stateful
-public class ProjetoDAO<TIPO> extends DAOGenerico<TIPO> implements Serializable{
+public class ProjetoDAO<TIPO> extends DAOGenerico<Projeto> implements Serializable{
+
     public ProjetoDAO(){
         super();
-        super.setClassePersistente(Projeto.class);
+        classePersistente = Projeto.class;
+        ordem = "nome";
+        maximoObjetos = 3;
+    }
+
+    public Projeto getObjectById(Object id) throws Exception {
+        Projeto obj = em.find(Projeto.class, id);
+        /*
+        A linha obj.getListaColaboradores().size(); é necessaria para inicializar a coleção para quando ela for exibida na tela não gerar 
+        um erro de lazyInicializationException
+         */
+        obj.getListaColaboradores().size();
+        return obj;
     }
 }

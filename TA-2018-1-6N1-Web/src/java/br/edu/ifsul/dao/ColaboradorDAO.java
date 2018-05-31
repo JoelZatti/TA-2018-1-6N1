@@ -14,9 +14,12 @@ import javax.ejb.Stateful;
  * @author Joel
  */
 @Stateful
-public class ColaboradorDAO<TIPO> extends DAOGenerico<TIPO> implements Serializable{
+public class ColaboradorDAO<TIPO> extends DAOGenerico<Colaborador> implements Serializable{
+    
     public ColaboradorDAO(){
         super();
-        super.setClassePersistente(Colaborador.class);
+        classePersistente = Colaborador.class;
+        ordem = "nome";
+        maximoObjetos = 3;
     }
 }

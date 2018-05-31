@@ -1,14 +1,16 @@
 package br.edu.ifsul.controle;
 
 import br.edu.ifsul.dao.ColaboradorDAO;
-import br.edu.ifsul.dao.SetorDAO;
 import br.edu.ifsul.dao.ProjetoDAO;
+import br.edu.ifsul.dao.SetorDAO;
+import br.edu.ifsul.dao.UsuarioDAO;
 import br.edu.ifsul.modelo.Colaborador;
-import br.edu.ifsul.modelo.Setor;
 import br.edu.ifsul.modelo.Projeto;
+import br.edu.ifsul.modelo.Setor;
+import br.edu.ifsul.modelo.Usuario;
 import java.io.Serializable;
 import javax.ejb.EJB;
-import javax.faces.view.ViewScoped;//Esse é o do @ViewScoped.
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 /**
@@ -17,7 +19,7 @@ import javax.inject.Named;
  */
 @Named(value = "controleProjeto")
 @ViewScoped
-public class ControleProjeto implements Serializable {
+public class ControleProjeto implements Serializable{
 
     @EJB
     private ProjetoDAO<Projeto> dao;
@@ -27,8 +29,12 @@ public class ControleProjeto implements Serializable {
     private SetorDAO<Setor> daoSetor;
     @EJB
     private ColaboradorDAO<Colaborador> daoColaborador;
+    private Colaborador colaborador;
+    @EJB
+    private UsuarioDAO<Usuario> daoUsuario;
+    private Boolean editandoColaborador;
 
-    public ControleProjeto(){
+    public ControleProjeto() {
         editando = false;
     }
 
@@ -43,40 +49,58 @@ public class ControleProjeto implements Serializable {
     }
 
     public void alterar(Object id){
-        try {
+        try{
             objeto = dao.getObjectById(id);
             editando = true;
-        } catch (Exception e){
-            Util.mensagemErro("Erro ao recuperar objeto: " + 
-                    Util.getMensagemErro(e));
+            //editandoPermissao = false;
+        }catch (Exception e){
+            Util.mensagemErro("Erro ao recuperar objeto: " + Util.getMensagemErro(e));
         }
     }
 
     public void excluir(Object id){
-        try {
+        try{
             objeto = dao.getObjectById(id);
             dao.remover(objeto);
             Util.mensagemInformacao("Objeto removido com sucesso!");
-        } catch (Exception e){
-            Util.mensagemErro("Erro ao remover objeto: " + 
-                    Util.getMensagemErro(e));
+        }catch (Exception e){
+            Util.mensagemErro("Erro ao remover objeto: " + Util.getMensagemErro(e));
         }
     }
 
     public void salvar(){
-        try {
-            if (objeto.getId() == null){
+        try{
+            if(objeto.getId() == null){
                 dao.persist(objeto);
-            } else {
+            }else{
                 dao.merge(objeto);
             }
-            Util.mensagemInformacao("Objeto persistido com sucesso!");
+            Util.mensagemInformacao("Objeto perdistido com sucesso!");
             editando = false;
-        } catch(Exception e){
-            Util.mensagemErro("Erro ao persistir objeto: " + 
-                    Util.getMensagemErro(e));
+        }catch(Exception e){
+            Util.mensagemErro("Erro ao persistir objeto " + Util.getMensagemErro(e));
         }
     }
+    
+    public void novoColaborador(){
+        setEditandoColaborador((Boolean) true);
+    }
+    
+    public void salvarColaborador(){
+        if(objeto.getListaColaboradores().contains(colaborador)){
+            Util.mensagemErro("Este projeto já possui este colaborador!");
+        }else{
+            objeto.getListaColaboradores().add(colaborador);
+            Util.mensagemInformacao("Colaborador adicionado com sucesso!");
+        }
+        editandoColaborador = false;
+    }
+    
+    public void removerColaborador(Colaborador obj){
+        objeto.getListaColaboradores().remove(obj);
+        Util.mensagemInformacao("Colaborador removido com sucesso!");
+    }
+    
     
     public ProjetoDAO<Projeto> getDao() {
         return dao;
@@ -118,4 +142,29 @@ public class ControleProjeto implements Serializable {
         this.daoColaborador = daoColaborador;
     }
 
+    public Colaborador getColaborador() {
+        return colaborador;
+}
+
+    public void setColaborador(Colaborador colaborador) {
+        this.colaborador = colaborador;
+    }
+
+    public Boolean getEditandoColaborador() {
+        return editandoColaborador;
+    }
+
+    public void setEditandoColaborador(Boolean editandoColaborador) {
+        this.editandoColaborador = editandoColaborador;
+    }
+  
+    public UsuarioDAO<Usuario> getDaoUsuario() {
+        return daoUsuario;
+}
+
+    public void setDaoUsuario(UsuarioDAO<Usuario> daoUsuario) {
+        this.daoUsuario = daoUsuario;
+    }
+
+  
 }
