@@ -43,18 +43,18 @@ public class Projeto implements Serializable {
     @Column(name = "nome", length = 50, nullable = false)
     private String nome;
 
-    @Length(max = 100, message = "A descriçao não pode ter mais que {max} caracteres")
-    @NotNull(message = "A descriçao deve ser informada")
-    @NotBlank(message = "A descriçao não pode ser em branco")
+    @Length(max = 100, message = "A descrição não pode ter mais que {max} caracteres")
+    @NotNull(message = "A descrição deve ser informada")
+    @NotBlank(message = "A descrição não pode ser em branco")
     @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
 
-    @NotNull(message = "O inicio deve ser informado")
+    @NotNull(message = "O início deve ser informado")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "inicio", nullable = false)
     private Calendar inicio;
 
-    @NotNull(message = "O fim deve ser informad")
+    @NotNull(message = "O fim deve ser informado")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fim", nullable = false)
     private Calendar fim;
