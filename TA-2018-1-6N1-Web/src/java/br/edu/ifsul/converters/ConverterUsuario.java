@@ -30,6 +30,7 @@ public class ConverterUsuario implements Serializable, Converter{
             return null;
         }
         return em.find(Usuario.class, string);
+//          return em.find(Usuario.class,Integer.parseInt(string));
     }
 
     @Override

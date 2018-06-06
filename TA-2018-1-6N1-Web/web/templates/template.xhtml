@@ -12,16 +12,16 @@
         <h:body>
             <b:container>
                 <h:form id="formMenu">
-                <b:navBar brand="TA - Sistema responsivo">
+                    <b:navBar brand="TA - Sistema responsivo">
                         <b:navbarLinks>
-                        <b:navLink value="Início" outcome="inicio"/>
+                            <b:navLink value="Início" outcome="inicio"/>
                             <b:dropMenu value="Cadastros">
                                 <b:navCommandLink value="Setor" ajax="false"
                                                   action="#{controleSetor.listar()}"/>
                                 <b:navCommandLink value="Usuario" ajax="false"
                                                   action="#{controleUsuario.listar()}"/>
-                             <b:navCommandLink value="Projeto" ajax="false"
-                                               action="#{controleProjeto.listar()}"/>
+                                <b:navCommandLink value="Projeto" ajax="false"
+                                                  action="#{controleProjeto.listar()}"/>
                             </b:dropMenu>
                         </b:navbarLinks>
                     </b:navBar>

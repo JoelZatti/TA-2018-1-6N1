@@ -14,7 +14,7 @@ import javax.ejb.Stateful;
  * @author Joel
  */
 @Stateful
-public class SetorDAO<TIPO> extends DAOGenerico<TIPO> implements Serializable{
+public class SetorDAO<TIPO> extends DAOGenerico<Setor> implements Serializable{
     public SetorDAO(){
         super();
         super.setClassePersistente(Setor.class);

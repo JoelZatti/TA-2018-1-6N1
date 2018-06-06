@@ -25,6 +25,8 @@
                                     <p:selectOneMenu value="#{controleProjeto.dao.ordem}">  
                                         <f:selectItem itemLabel="ID" itemValue="id"/>   
                                         <f:selectItem itemLabel="Nome" itemValue="nome"/>
+                                        <f:selectItem itemLabel="E-mail" itemValue="email"/>
+                                         <f:selectItem itemLabel="Setor" itemValue="setor.nome"/>
                                         <p:ajax update="listagem"/>
                                     </p:selectOneMenu>
                                     <p:outputLabel value="Filtro: "/>
@@ -55,21 +57,17 @@
                         <p:column headerText="Nome">
                             <p:outputLabel value="#{obj.nome}"/>
                         </p:column>
-                        <p:column headerText="Descrição">
+                          <p:column headerText="Descrição">
                             <p:outputLabel value="#{obj.descricao}"/>
-                        </p:column>       
+                        </p:column>
                         <p:column headerText="Data de Início">
                             <p:outputLabel value="#{obj.inicio.time}"><f:convertDateTime pattern="dd/MM/yyyy"/></p:outputLabel>
                         </p:column>
                         <p:column headerText="Data de Final">
                             <p:outputLabel value="#{obj.fim.time}"><f:convertDateTime pattern="dd/MM/yyyy"/></p:outputLabel>
                         </p:column>
-                        <p:column headerText="Setor">
-                            <p:outputLabel value="#{obj.setor.nome}"/>
-                        </p:column>                        
                         <p:column headerText="Ativo">
-                            <p:outputLabel value="Sim" rendered="#{obj.ativo=='true'}"/>
-                            <p:outputLabel value="Não" rendered="#{obj.ativo=='false'}"/>
+                            <p:outputLabel value="#{obj.ativo}"/>
                         </p:column>
                         <p:column headerText="Ações">
                             <div align="center">
@@ -90,3 +88,4 @@
         </ui:define>
     </ui:composition>
 </html>
+

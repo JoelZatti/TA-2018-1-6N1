@@ -75,7 +75,7 @@ public class ControleProjeto implements Serializable{
             }else{
                 dao.merge(objeto);
             }
-            Util.mensagemInformacao("Objeto perdistido com sucesso!");
+            Util.mensagemInformacao("Objeto persistido com sucesso!");
             editando = false;
         }catch(Exception e){
             Util.mensagemErro("Erro ao persistir objeto " + Util.getMensagemErro(e));
@@ -83,7 +83,8 @@ public class ControleProjeto implements Serializable{
     }
     
     public void novoColaborador(){
-        setEditandoColaborador((Boolean) true);
+//        setEditandoColaborador((Boolean) true);
+          editandoColaborador = true;
     }
     
     public void salvarColaborador(){

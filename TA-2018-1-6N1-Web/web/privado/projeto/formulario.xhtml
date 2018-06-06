@@ -7,110 +7,126 @@
     <h:form id="formEdicao">
         <h:panelGroup rendered="#{controleProjeto.editando}">
             <div class="ui-fluid">
-                <!--                <p:messages id="messages"/>-->
-                <p:messages/>
+                <p:messages id="messages"/>
                 <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
                              layout="grid" styleClass="ui-panelgrid-blank">
                     <f:facet name="header">
                         <p:outputLabel value="Edição de Projetos"/>
                     </f:facet>
-                    <p:outputLabel value="ID"/>
+                    <p:outputLabel value="ID" />
                     <p:inputText value="#{controleProjeto.objeto.id}"
                                  size="5" readonly="true"/>
                     <p:outputLabel value="Nome" for="txtNome"/>
                     <p:inputText value="#{controleProjeto.objeto.nome}"
-                                 id="txtNome" size="40" maxlength="40"/>
+                                 id="txtNome" size="50" maxlength="40"/>
                     <p:outputLabel value="Descrição" for="txtDescricao"/>
-                    <p:inputText value="#{controleProjeto.objeto.descricao}"
-                                 id="txtDescricao" size="40" maxlength="40"/>
-                    <p:outputLabel value="Data da Início" for="txtInicio"/>
-                    <p:calendar 
-                        id="txtInicio"
-                        value="#{controleProjeto.objeto.inicio}"                               
-                        pattern="dd/MM/yyyy"
-                        locale="pt_BR" size="12" mask="true" navigator="true">
+                    <p:inputTextarea rows="1" cols="40" value="#{controleProjeto.objeto.descricao}"
+                                     id="txtDescricao" maxlength="100"/>
+
+                    <p:outputLabel value="Data de Inicio" for="txtInicio"/>
+                    <p:calendar value="#{controleProjeto.objeto.inicio}"
+                                id="txtInicio" 
+                                mask="true" pattern="dd/MM/yyyy" navigator="true">
                         <f:converter converterId="converterCalendar"/>
                     </p:calendar>
-                    <p:outputLabel value="Data Final" for="txtFim"/>
-                    <p:calendar 
-                        id="txtFim"
-                        value="#{controleProjeto.objeto.fim}"                               
-                        pattern="dd/MM/yyyy"
-                        locale="pt_BR" size="12" mask="true" navigator="true">
+                    <p:outputLabel value="Data de Fim" for="txtFim"/>
+                    <p:calendar value="#{controleProjeto.objeto.fim}"
+                                id="txtFim" 
+                                mask="true" pattern="dd/MM/yyyy" navigator="true">
                         <f:converter converterId="converterCalendar"/>
                     </p:calendar>
-                    <p:outputLabel value="Setor" for="selectSetor"/>
-                    <p:selectOneMenu id="selectSetor"
-                                     value="#{controleProjeto.objeto.setor}">
+
+                    <p:outputLabel for="Situacao" value="Situação:" />
+                    <p:selectOneRadio id="Situacao" value="#{controleProjeto.objeto.ativo}">
+                        <f:selectItem itemLabel="Ativo" itemValue="true" />
+                        <f:selectItem itemLabel="Desativado" itemValue="false" />
+                    </p:selectOneRadio>
+
+                    <p:outputLabel value="Setor" for="SelectSetor"/>
+                    <p:selectOneMenu value="#{controleProjeto.objeto.setor}"
+                                     id="SelectSetor" filter="true" filterMatchMode="startsWith">
                         <f:converter converterId="converterSetor"/>
-                        <f:selectItem itemLabel="Selecione um registro"
+                        <f:selectItem itemLabel="Selecione um Registro"
                                       noSelectionOption="true"/>
                         <f:selectItems value="#{controleProjeto.daoSetor.listaTodos}"
                                        var="s" itemLabel="#{s.nome}"/>
-                    </p:selectOneMenu>
-                    <p:outputLabel for="projetoAtivo" value="Ativo"/>
-                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                        <p:selectBooleanButton id="projetoAtivo" value="#{controleProjeto.objeto.ativo}" onLabel="true" offLabel="false"/>
-                    </h:panelGrid>
+                    </p:selectOneMenu> 
                     <p:commandButton value="Salvar"
                                      icon="ui-icon-disk"
                                      actionListener="#{controleProjeto.salvar()}"
-                                     update="formEdicao :formListagem"/>
+                                     update="formEdicao :formListagem"/>                                    
                 </p:panelGrid>
 
-                <!--Formulário de inclusão de colaboradore no projeto-->
-                <h:panelGroup id="painelColaborador">
+
+                <h:panelGroup id="painelColaboradores">
                     <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
                                  layout="grid" styleClass="ui-panelgrid-blank"
                                  rendered="#{controleProjeto.editandoColaborador}">
+
                         <f:facet name="header">
-                            <p:outputLabel value="Edição de Colaboradores em Projetos"/>
-                        </f:facet>             
-                        <p:outputLabel value="Colaborador" for="selectColaborador"/>
-                        <p:selectOneMenu id="selectColaborador" value="#{controleProjeto.colaborador}"
+                            <p:outputLabel value="Edição de Colaboradores"/>
+                        </f:facet> 
+                        <p:outputLabel value="ID" for="Id"/>
+                        <p:inputText value="#{controleProjeto.objeto.id}"
+                                     id="Id" 
+                                     size="5" readonly="true"/>
+                        <p:outputLabel value="Colaboradores" for="selectColaborador"/>
+                        <p:selectOneMenu value="#{controleProjeto.colaborador.usuario}"
+                                         id="selectColaborador" 
                                          filter="true">
                             <f:converter converterId="converterUsuario"/>
-                            <f:selectItem noSelectionOption="true"
-                                          itemLabel="Selecione um Registro"/>
+                            <f:selectItem itemLabel="Selecione um Registro"
+                                          noSelectionOption="true"/>
                             <f:selectItems value="#{controleProjeto.daoUsuario.listaTodos}"
-                                           var="p" itemLabel="#{p.nome}"/>
+                                           var="u" itemLabel="#{u.nome}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value=""/>
+
+
+                        <p:outputLabel value="Carga Horaria" for="txtCargaH"/>
+                        <p:inputText value="#{controleProjeto.colaborador.cargaHoraria}"
+                                     id="txtCargaH" size="15" maxlength="10"/>
+
+                        <p:outputLabel for="Gestor" value="Gestor" />
+                        <p:selectOneRadio id="Gestor" value="#{controleProjeto.colaborador.gestor}">
+                            <f:selectItem itemLabel="Sim" itemValue="true" />
+                            <f:selectItem itemLabel="Nao" itemValue="false" />
+                        </p:selectOneRadio>
+
                         <p:commandButton value="Salvar Colaborador" icon="ui-icon-disk"
                                          actionListener="#{controleProjeto.salvarColaborador()}"
                                          id="btnAdicionarColaborador"
-                                         process="btnAdicionarColaborador selectColaborador"
-                                         update="messages painelColaborador listagemColaborador"/>
-                    </p:panelGrid>                                                            
-                </h:panelGroup>    
+                                         process=" btnAdicionarColaborador txtCargaH Gestor Id selectColaborador "
+                                         update="messages painelColaboradores listagemColaborador "/>
+                    </p:panelGrid>
+                </h:panelGroup>
+
             </div>
             <h:panelGroup id="listagemColaborador">
                 <h:panelGroup rendered="#{!controleProjeto.editandoColaborador}">
-                    <p:commandButton value="Novo Colaborador"
+                    <p:commandButton value="Novo Colaborador" 
                                      actionListener="#{controleProjeto.novoColaborador()}"
-                                     update="listagemColaborador painelColaborador"
+                                     update="listagemColaborador painelColaboradores"
                                      process="@this"/>
-                    <p:dataTable value="#{controleProjeto.objeto.listaColaboradores}" var="col"
-                                 reflow="true">
+                    <p:dataTable value="#{controleProjeto.objeto.listaColaboradores}" var="col" reflow="true">
                         <f:facet name="header">
-                            <p:outputLabel value="Colaboradores no Projeto"/>
+                            <p:outputLabel value="Lista de Colaboradores"/>
                         </f:facet>
-                        <p:column headerText="Colaborador">
+                        <p:column headerText="Nome">
                             <p:outputLabel value="#{col.usuario.nome}"/>
                         </p:column>
                         <p:column headerText="Carga Horária">
-                            <p:outputLabel value="#{col.cargaHoraria.time}"><f:convertDateTime pattern="HH:mm" timeZone="GMT-3"/></p:outputLabel>
-                        </p:column>  
-                        <p:column headerText="Gestor">
-                            <p:outputLabel value="Sim" rendered="#{col.gestor=='true'}"/>
-                            <p:outputLabel value="Não" rendered="#{col.status=='false'}"/>
+                            <p:outputLabel value="#{col.cargaHoraria}">
+                                
+                            </p:outputLabel>
                         </p:column>
-
+                        <p:column headerText="Gestor">
+                            <p:outputLabel value="#{col.gestor}"/>
+                        </p:column>
                         <p:column headerText="Ações">
                             <div align="center">
                                 <p:commandButton icon="ui-icon-trash"
-                                                 actionListener="#{controleProjeto.removerColaborador(col)}"
-                                                 process="@this" update="@form"/>                                                 
+                                                 actionListener="#{controleProjeto.removerColaborador(per)}"
+                                                 process="@this" update="@form"/>
                             </div>
                         </p:column>
                     </p:dataTable>
@@ -119,3 +135,4 @@
         </h:panelGroup>
     </h:form>
 </html>
+

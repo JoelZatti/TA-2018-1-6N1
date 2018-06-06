@@ -6,33 +6,32 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/templates/template.xhtml">
-        <ui:define name="titulo">Manutenção de Colaborador</ui:define>
+        <ui:define name="titulo">Manutenção de Projetos</ui:define>
         <ui:define name="conteudo">
             <h:form id="formListagem">
-                <h:panelGroup rendered="#{!controleColaborador.editando}">
+                <h:panelGroup rendered="#{!controleProjeto.editando}">
                     <p:messages/>
                     <p:commandButton value="Novo"
                                      icon="ui-icon-plus"
-                                     actionListener="#{controleColaborador.novo()}"
+                                     actionListener="#{controleProjeto.novo()}"
                                      update="formEdicao formListagem"/>
-                    <p:dataTable value="#{controleColaborador.dao.listaObjetos}"
+                    <p:dataTable value="#{controleProjeto.dao.listaObjetos}"
                                  var="obj" reflow="true" id="listagem">
                         <f:facet name="header">                            
                             <div class="ui-fluid" >
                                 <p:panelGrid columns="7" styleClass="ui-panelgrid-blank" layout="grid"
                                              columnClasses="col-md-1,col-md-2,col-md-1,col-md-3,col-md-2,col-md-2,col-md-1">
                                     <p:outputLabel value="Ordem:" />
-                                    <p:selectOneMenu value="#{controleColaborador.dao.ordem}">  
+                                    <p:selectOneMenu value="#{controleProjeto.dao.ordem}">  
                                         <f:selectItem itemLabel="ID" itemValue="id"/>   
-                                        <f:selectItem itemLabel="cargaHoraria" itemValue="cargaHoraria"/>
-                                        <f:selectItem itemLabel="gestor" itemValue="gestor"/>
+                                        <f:selectItem itemLabel="Nome" itemValue="nome"/>
                                         <p:ajax update="listagem"/>
                                     </p:selectOneMenu>
                                     <p:outputLabel value="Filtro: "/>
-                                    <p:inputText value="#{controleColaborador.dao.filtro}"/>                                                            
+                                    <p:inputText value="#{controleProjeto.dao.filtro}"/>                                                            
                                     <p:commandButton value="Filtrar" update="listagem" icon="ui-icon-search"/>
                                     <p:outputLabel value="Máximo de objetos:"/>
-                                    <p:inputNumber value="#{controleColaborador.dao.maximoObjetos}" size="3"
+                                    <p:inputNumber value="#{controleProjeto.dao.maximoObjetos}" size="3"
                                                    thousandSeparator="" decimalSeparator="" decimalPlaces="0">
                                         <p:ajax event="blur" update="listagem"/> 
                                     </p:inputNumber>
@@ -40,43 +39,46 @@
                             </div>                                            
                         </f:facet>
                         <f:facet name="footer"> 
-                            <p:outputLabel value="#{controleColaborador.dao.mensagemNavegacao} &nbsp; &nbsp;"/>
-                            <p:commandButton action="#{controleColaborador.dao.primeiro()}"
+                            <p:outputLabel value="#{controleProjeto.dao.mensagemNavegacao} &nbsp; &nbsp;"/>
+                            <p:commandButton action="#{controleProjeto.dao.primeiro()}"
                                              icon="ui-icon-seek-first" title="Primeiro" update="listagem"/>
-                            <p:commandButton action="#{controleColaborador.dao.anterior()}"
+                            <p:commandButton action="#{controleProjeto.dao.anterior()}"
                                              icon="ui-icon-seek-prev" title="Anterior" update="listagem"/>
-                            <p:commandButton action="#{controleColaborador.dao.proximo()}"
+                            <p:commandButton action="#{controleProjeto.dao.proximo()}"
                                              icon="ui-icon-seek-next" title="Próximo" update="listagem"/>
-                            <p:commandButton action="#{controleColaborador.dao.ultimo()}"
+                            <p:commandButton action="#{controleProjeto.dao.ultimo()}"
                                              icon="ui-icon-seek-end" title="Ultimo" update="listagem"/>                                                        
                         </f:facet>	                         
                         <p:column headerText="ID">
                             <p:outputLabel value="#{obj.id}"/>
                         </p:column>
-                        <p:column headerText="Carga Horária">
-                            <p:outputLabel value="#{obj.cargaHoraria}"/>
+                        <p:column headerText="Nome">
+                            <p:outputLabel value="#{obj.nome}"/>
                         </p:column>
-                        <p:column headerText="Gestor">
-                            <p:outputLabel value="#{obj.gestor}"/>
+                        <p:column headerText="Descrição">
+                            <p:outputLabel value="#{obj.descricao}"/>
+                        </p:column>       
+                        <p:column headerText="Data de Início">
+                            <p:outputLabel value="#{obj.inicio.time}"><f:convertDateTime pattern="dd/MM/yyyy"/></p:outputLabel>
                         </p:column>
-                        <p:column headerText="Gestor?">
-                            <p:selectOneRadio value="#">    
-                                <item Label="Sim" itemValue="true" />    
-                                <item Label="Não" itemValue="false" />    
-                                <p:ajax update="panelGeral" event="change"/>  
-                            </p:selectOneRadio>    
-                            <p:outputPanel id="panelGeral">
-                                <p:panel id="panel" rendered="#"/> 
-                            </p:outputPanel>
+                        <p:column headerText="Data de Final">
+                            <p:outputLabel value="#{obj.fim.time}"><f:convertDateTime pattern="dd/MM/yyyy"/></p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Setor">
+                            <p:outputLabel value="#{obj.setor.nome}"/>
+                        </p:column>                        
+                        <p:column headerText="Ativo">
+                            <p:outputLabel value="Sim" rendered="#{obj.ativo=='true'}"/>
+                            <p:outputLabel value="Não" rendered="#{obj.ativo=='false'}"/>
                         </p:column>
                         <p:column headerText="Ações">
                             <div align="center">
                                 <p:commandButton icon="ui-icon-pencil" 
-                                                 actionListener="#{controleColaborador.alterar(obj.id)}"
+                                                 actionListener="#{controleProjeto.alterar(obj.id)}"
                                                  process="@this"
                                                  update="formListagem :formEdicao"/>
                                 <p:commandButton icon="ui-icon-trash"
-                                                 actionListener="#{controleColaborador.excluir(obj.id)}"
+                                                 actionListener="#{controleProjeto.excluir(obj.id)}"
                                                  process="@this"
                                                  update="formListagem"/>
                             </div>
