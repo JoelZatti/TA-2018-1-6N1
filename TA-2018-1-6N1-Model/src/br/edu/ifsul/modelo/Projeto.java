@@ -75,6 +75,15 @@ public class Projeto implements Serializable {
     public Projeto() {
     }
 
+    public void adicionarColaborador(Colaborador obj) {
+        obj.setProjeto(this);
+        this.listaColaboradores.add(obj);
+    }
+
+    public void removerColaborador(int idx) {
+        this.listaColaboradores.remove(idx);
+    }
+
     public Integer getId() {
         return id;
     }

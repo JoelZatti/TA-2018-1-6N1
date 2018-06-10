@@ -45,7 +45,7 @@ public class Colaborador implements Serializable {
     @ForeignKey(name = "fk_projeto")
     private Projeto projeto;
     
-    @NotNull(message = "O usuario deve ser informado")
+    @NotNull(message = "O usuário deve ser informado")
     @ManyToOne
     @JoinColumn(name = "usuario", referencedColumnName = "id", nullable = false)
     @ForeignKey(name = "fk_usuario")
