@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package br.edu.ifsul.converters;
+package br.edu.ifsul.converter;
 
-import br.edu.ifsul.modelo.Colaborador;
+import br.edu.ifsul.modelo.Setor;
 import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,8 +14,8 @@ import javax.persistence.PersistenceContext;
  * @author Joel
  */
 
-@FacesConverter(value = "converterColaborador")
-public class ConverterColaborador implements Serializable, Converter {
+@FacesConverter(value = "converterSetor")
+public class ConverterSetor implements Serializable, Converter {
     
     @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")
     private EntityManager em;
@@ -30,7 +25,7 @@ public class ConverterColaborador implements Serializable, Converter {
         if (string == null || string.equals("Selecione um registro"))  {
             return null;
         }
-        return em.find(Colaborador.class, Integer.parseInt(string));
+        return em.find(Setor.class, Integer.parseInt(string));
     }
 
     @Override
@@ -38,7 +33,7 @@ public class ConverterColaborador implements Serializable, Converter {
         if (o == null) {
             return null;
         }
-        Colaborador obj = (Colaborador) o;
+        Setor obj = (Setor) o;
         return obj.getId().toString();
     }
     

@@ -3,6 +3,7 @@ package br.edu.ifsul.dao;
 import br.edu.ifsul.modelo.Usuario;
 import java.io.Serializable;
 import javax.ejb.Stateful;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,6 +26,13 @@ public class UsuarioDAO<TIPO> extends DAOGenerico<Usuario> implements Serializab
          * para quando ela for exibida na tela não gerar um erro de 
          * lazyInicializationException
          */
+        obj.getPermissoes().size();
+        return obj;
+    }
+    public Usuario localizaPorNomeUsuario(String nomeUsuario){
+        Query query = em.createQuery("from Usuario where upper(usuario) = :nomeUsuario");
+        query.setParameter("nomeUsuario", nomeUsuario.toUpperCase());
+        Usuario obj = (Usuario) query.getSingleResult();
         obj.getPermissoes().size();
         return obj;
     }

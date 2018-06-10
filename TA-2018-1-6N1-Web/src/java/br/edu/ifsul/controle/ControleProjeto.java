@@ -28,14 +28,14 @@ public class ControleProjeto implements Serializable{
     @EJB
     private SetorDAO<Setor> daoSetor;
     @EJB
-    private ColaboradorDAO<Colaborador> daoColaborador;
-    private Colaborador colaborador;
-    @EJB
-    private UsuarioDAO<Usuario> daoUsuario;
-    private Boolean editandoColaborador;
+    private UsuarioDAO<Usuario> daoUsuario; 
+    private Boolean editandoColaborador; 
+    private Colaborador colaborador;  
+    private boolean novoColaborador;
 
     public ControleProjeto() {
         editando = false;
+        editandoColaborador = false;
     }
 
     public String listar(){
@@ -83,22 +83,39 @@ public class ControleProjeto implements Serializable{
     }
     
     public void novoColaborador(){
-//        setEditandoColaborador((Boolean) true);
+          colaborador = new Colaborador();
           editandoColaborador = true;
+          novoColaborador = true;
     }
+    
+//    public void salvarColaborador(){
+//        if(objeto.getListaColaboradores().contains(colaborador)){
+//            Util.mensagemErro("Este projeto já possui este colaborador!");
+//        }else{
+//            objeto.getListaColaboradores().add(colaborador);
+//            Util.mensagemInformacao("Colaborador adicionado com sucesso!");
+//        }
+//        editandoColaborador = false;
+//    }
     
     public void salvarColaborador(){
-        if(objeto.getListaColaboradores().contains(colaborador)){
-            Util.mensagemErro("Este projeto já possui este colaborador!");
-        }else{
-            objeto.getListaColaboradores().add(colaborador);
-            Util.mensagemInformacao("Colaborador adicionado com sucesso!");
+        if (colaborador.getId() == null) {
+            if (novoColaborador) {
+                objeto.adicionarColaborador(colaborador);
+            }
         }
         editandoColaborador = false;
+        Util.mensagemInformacao("Colaborador persistido com sucesso!");
     }
     
-    public void removerColaborador(Colaborador obj){
-        objeto.getListaColaboradores().remove(obj);
+    public void alterarColaborador(int index){
+        colaborador = objeto.getListaColaboradores().get(index);
+        editandoColaborador = true;
+        novoColaborador = false;
+    }
+    
+    public void excluirColaborador(int index){
+        objeto.removerColaborador(index);
         Util.mensagemInformacao("Colaborador removido com sucesso!");
     }
     
@@ -135,14 +152,6 @@ public class ControleProjeto implements Serializable{
         this.daoSetor = daoSetor;
     }
     
-    public ColaboradorDAO<Colaborador> getDaoColaborador() {
-        return daoColaborador;
-    }
-
-    public void setDaoColaborador(ColaboradorDAO<Colaborador> daoColaborador) {
-        this.daoColaborador = daoColaborador;
-    }
-
     public Colaborador getColaborador() {
         return colaborador;
 }
@@ -165,6 +174,14 @@ public class ControleProjeto implements Serializable{
 
     public void setDaoUsuario(UsuarioDAO<Usuario> daoUsuario) {
         this.daoUsuario = daoUsuario;
+    }
+
+    public boolean isNovoColaborador() {
+        return novoColaborador;
+    }
+
+    public void setNovoColaborador(boolean novoColaborador) {
+        this.novoColaborador = novoColaborador;
     }
 
   

@@ -58,7 +58,7 @@
                 </p:panelGrid>
 
 
-                <h:panelGroup id="painelColaboradores">
+                <h:panelGroup id="painelColaborador">
                     <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
                                  layout="grid" styleClass="ui-panelgrid-blank"
                                  rendered="#{controleProjeto.editandoColaborador}">
@@ -66,37 +66,30 @@
                         <f:facet name="header">
                             <p:outputLabel value="Edição de Colaboradores"/>
                         </f:facet> 
-                        <p:outputLabel value="ID" for="Id"/>
-                        <p:inputText value="#{controleProjeto.objeto.id}"
-                                     id="Id" 
+                        <p:outputLabel for="txtIdColaborador" value="ID"/>
+                        <p:inputText id="txtIdColaborador" value="#{controleProjeto.colaborador.id}"
                                      size="5" readonly="true"/>
-                        <p:outputLabel value="Colaboradores" for="selectColaborador"/>
-                        <p:selectOneMenu value="#{controleProjeto.colaborador.usuario}"
-                                         id="selectColaborador" 
-                                         filter="true">
+                        <p:outputLabel for="cbxUsuario" value="Usuário"/>
+                        <p:selectOneMenu id="cbxUsuario"  value="#{controleProjeto.colaborador.usuario}">
+                        <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                        <f:selectItems value="#{controleProjeto.daoUsuario.listaTodos}"
+                                       var="u"
+                                       itemLabel="#{u.nome}"/>
                             <f:converter converterId="converterUsuario"/>
-                            <f:selectItem itemLabel="Selecione um Registro"
-                                          noSelectionOption="true"/>
-                            <f:selectItems value="#{controleProjeto.daoUsuario.listaTodos}"
-                                           var="u" itemLabel="#{u.nome}"/>
-                        </p:selectOneMenu>
+                        </p:selectOneMenu>                      
 
-
-                        <p:outputLabel value="Carga Horaria" for="txtCargaH"/>
-                        <p:inputText value="#{controleProjeto.colaborador.cargaHoraria}"
-                                     id="txtCargaH" size="15" maxlength="10"/>
-
-                        <p:outputLabel for="Gestor" value="Gestor" />
-                        <p:selectOneRadio id="Gestor" value="#{controleProjeto.colaborador.gestor}">
-                            <f:selectItem itemLabel="Sim" itemValue="true" />
-                            <f:selectItem itemLabel="Nao" itemValue="false" />
-                        </p:selectOneRadio>
+                        <p:outputLabel value="Gestor" for="selectGestor" />
+                        <p:selectBooleanCheckbox id="selectGestor" value="#{controleProjeto.colaborador.gestor}"/>
+                        <p:outputLabel for="txtCarga" value="Carga Horaria"/>
+                        <p:inputNumber id="txtCarga" value="#{controleProjeto.colaborador.cargaHoraria}"
+                                      size="12" maxlength="12"
+                                      required="true" decimalPlaces="0" thousandSeparator=""/>
+                        <p:outputLabel value=""/>
 
                         <p:commandButton value="Salvar Colaborador" icon="ui-icon-disk"
                                          actionListener="#{controleProjeto.salvarColaborador()}"
-                                         id="btnAdicionarColaborador"
-                                         process=" btnAdicionarColaborador txtCargaH Gestor Id selectColaborador "
-                                         update="messages painelColaboradores listagemColaborador "/>
+                                         update="@form"
+                                         id="btnSalvarColaborador"/>
                     </p:panelGrid>
                 </h:panelGroup>
 
@@ -105,7 +98,7 @@
                 <h:panelGroup rendered="#{!controleProjeto.editandoColaborador}">
                     <p:commandButton value="Novo Colaborador" 
                                      actionListener="#{controleProjeto.novoColaborador()}"
-                                     update="listagemColaborador painelColaboradores"
+                                     update="listagemColaborador painelColaborador"
                                      process="@this"/>
                     <p:dataTable value="#{controleProjeto.objeto.listaColaboradores}" var="col" reflow="true">
                         <f:facet name="header">
@@ -125,7 +118,7 @@
                         <p:column headerText="Ações">
                             <div align="center">
                                 <p:commandButton icon="ui-icon-trash"
-                                                 actionListener="#{controleProjeto.removerColaborador(per)}"
+                                                 actionListener="#{controleProjeto.excluirColaborador(index)}"
                                                  process="@this" update="@form"/>
                             </div>
                         </p:column>

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifsul.converters;
+package br.edu.ifsul.converter;
 
-import br.edu.ifsul.modelo.Usuario;
+import br.edu.ifsul.modelo.Projeto;
 import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,28 +18,28 @@ import javax.persistence.PersistenceContext;
  *
  * @author Joel
  */
-@FacesConverter(value = "converterUsuario")
-public class ConverterUsuario implements Serializable, Converter{
+
+@FacesConverter(value = "converterProjeto")
+public class ConverterProjetoOld implements Serializable, Converter {
     
-     @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")
+    @PersistenceContext(unitName = "TA-2018-1-6N1-WebPU")
     private EntityManager em;
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-        if(string == null || string.equals("Selecione um registro")){
+        if (string == null || string.equals("Selecione um registro"))  {
             return null;
         }
-        return em.find(Usuario.class, string);
-//          return em.find(Usuario.class,Integer.parseInt(string));
+        return em.find(Projeto.class, Integer.parseInt(string));
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-        if(o == null){
+        if (o == null) {
             return null;
         }
-        Usuario obj = (Usuario) o;
-        return obj.getNome();
+        Projeto obj = (Projeto) o;
+        return obj.getId().toString();
     }
     
 }
